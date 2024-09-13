@@ -325,10 +325,12 @@ where hire_date=(select MIN(hire_date) from employees);
 
 --49. How can you count the number of employees who have a salary between 50,000 and 100,000, grouped by department?
 
-select count(e.name) , d.department_name
-from employees e
-join departments d on e.department_id=d.department_id
-group by d.department_name;
+SELECT COUNT(e.name), d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.salary BETWEEN 50000 AND 100000
+GROUP BY d.department_name;
+
 
 ---50. Write a query to display the highest, lowest, and average salary for each department.*/
 
