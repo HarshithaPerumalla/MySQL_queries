@@ -258,3 +258,81 @@ group by d.department_id;
 delete from employees
 where department_id is null;
 
+---DAY 3
+
+---41. Write a query to select the second-highest salary from the employees table without using LIMIT.
+
+select MAX(salary) from employees
+where salary<(select MAX(salary) from employees);
+
+---42. How would you retrieve all employees who have a manager and are working in a department that starts with the letter 'S'?
+
+select e.name as employees , m.name, d.department_name from employees e
+join employees m on e.manager_id=m.employee_id
+join departments d on m.department_id=d.department_id
+where d.department_name like 's%' or d.department_name like 'S%';
+
+
+---43.Write a query to calculate the total salary paid for each job role, but only include roles that have more than 5 employees.?
+
+SELECT job_role, SUM(salary) as total_salary from employees
+group by job_role
+having count(name)>1;
+
+---44. How can you list all employees who were hired in the last 6 months from today's date?
+
+SELECT name, hire_date
+FROM employees
+WHERE hire_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH);
+
+---45. Write a query to find the department with the highest average salary.
+
+select d.department_name,avg(e.salary)
+from employees e
+join
+departments d on e.department_id=d.department_id
+group by(d.department_name)
+order by avg(e.salary) DESC
+limit 1;
+
+
+---46. Write a query to fetch the names of employees who have a salary greater than the average salary across the company.
+
+select name as employee from employees
+where salary>(select avg(salary) from employees);
+
+--47. How would you find the difference in the number of employees between the 'HR' and 'Engineering' departments?
+
+select
+(select count(e.employee_id) from employees e
+join departments d on e.department_id=d.department_id
+where d.department_name='HR')
+-
+(select count(e.employee_id) from employees e
+join departments d on e.department_id=d.department_id
+where d.department_name='Engineering')
+as  employee_count_difference;
+
+W--48. rite a query to display the name and hire_date of the employee who has been with the company the longest.
+
+select name,hire_date from employees
+order by hire_date
+LIMIT 1;
+
+select name,hire_date from employees
+where hire_date=(select MIN(hire_date) from employees);
+
+
+--49. How can you count the number of employees who have a salary between 50,000 and 100,000, grouped by department?
+
+select count(e.name) , d.department_name
+from employees e
+join departments d on e.department_id=d.department_id
+group by d.department_name;
+
+---50. Write a query to display the highest, lowest, and average salary for each department.*/
+
+select d.department_name,AVG(e.salary) AS avg_salary, MAX(salary) AS MAX_SALARY, MIN(e.salary) AS MIN_SALARY
+from employees e
+join departments d on e.department_id=d.department_id
+group by d.department_name;
